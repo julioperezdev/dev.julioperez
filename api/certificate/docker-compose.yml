@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  certificate-database:
+    container_name: certificate-database
+    image: postgres
+    environment:
+      POSTGRES_USER: julioperezdev
+      POSTGRES_PASSWORD: openSourcePassword
+      PGDATA: /data/postgres
+      POSTGRES_DB: certificate
+    volumes:
+      - ./database:/data/postgres
+    ports:
+      - "15432:5432"
+    restart: unless-stopped
