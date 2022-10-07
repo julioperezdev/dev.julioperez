@@ -1,8 +1,8 @@
 package dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.service;
 
-import dev.julioperez.certificate.pdfCertificate.application.modelMapper.StudentCertificateModelMapper;
+import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.adapter.PersistStudentCertificateAdapterRepository;
+import dev.julioperez.certificate.pdfCertificate.domain.exception.StudentCertificateDontHaveValidField;
 import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
-import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.model.StudentCertificateEntity;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,34 +22,117 @@ import static org.mockito.BDDMockito.*;
 class PersistStudentCertificateServiceTest {
 
     @Mock
-    StudentCertificateModelMapper studentCertificateModelMapper;
+    PersistStudentCertificateAdapterRepository persistStudentCertificateRepository;
 
     @InjectMocks
     PersistStudentCertificateService service;
 
     @Nested
-    public class saveStudentCertificate{
+    public class saveStudentCertificateService{
 
-        StudentCertificateEvent studentCertificateEvent =
-                new StudentCertificateEvent(
-                        UUID.randomUUID(),
-                        "Java Course",
-                        UUID.randomUUID(),
-                        "Joe Smith");
+        @Test
+        void itShouldSaveStudentCertificateWithoutCertificateHashHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithValidFields =
+             new StudentCertificateEvent(
+                     UUID.randomUUID(),
+                     "Java Course",
+                     UUID.randomUUID(),
+                     "Joe Smith");
+            //when
+            service.saveStudentCertificate(studentCertificateEventWithValidFields);
+            //then
+            then(persistStudentCertificateRepository).should().saveStudentCertificate(any(StudentCertificateEvent.class));
+        }
 
-         @Test
-         void itShouldSaveStudentCertificateWithoutCertificateHashHappyCase(){
-             //given
-             given(studentCertificateModelMapper
-                     .toStudentCertificateEntity(studentCertificateEvent))
-                     .willReturn(any(StudentCertificateEntity.class));
-             //when
-             service.saveStudentCertificate(studentCertificateEvent);
-             //then
-             then(studentCertificateModelMapper)
-                     .should()
-                     .toStudentCertificateEntity(any(StudentCertificateEvent.class));
-             then(studentCertificateModelMapper).shouldHaveNoMoreInteractions();
-         }
+        @Test
+        void itShouldNotSaveStudentCertificateWithoutCourseIdNullNotHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithCourseIdNull =
+                    new StudentCertificateEvent(
+                            null,
+                            "Java Course",
+                            UUID.randomUUID(),
+                            "Joe Smith");
+            //when
+            //then
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEventWithCourseIdNull));
+            then(persistStudentCertificateRepository).shouldHaveNoInteractions();
+        }
+
+        @Test
+        void itShouldNotSaveStudentCertificateWithoutCourseNameNullNotHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithCourseNameNull =
+                    new StudentCertificateEvent(
+                            UUID.randomUUID(),
+                            null,
+                            UUID.randomUUID(),
+                            "Joe Smith");
+            //when
+            //then
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEventWithCourseNameNull));
+            then(persistStudentCertificateRepository).shouldHaveNoInteractions();
+        }
+
+        @Test
+        void itShouldNotSaveStudentCertificateWithoutStudentIdNullNotHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithStudentIdNull =
+                    new StudentCertificateEvent(
+                            UUID.randomUUID(),
+                            "Java Course",
+                            null,
+                            "Joe Smith");
+            //when
+            //then
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEventWithStudentIdNull));
+            then(persistStudentCertificateRepository).shouldHaveNoInteractions();
+        }
+
+        @Test
+        void itShouldNotSaveStudentCertificateWithoutStudentNameNullNotHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithStudentNameNull =
+                    new StudentCertificateEvent(
+                            UUID.randomUUID(),
+                            "Java Course",
+                            UUID.randomUUID(),
+                            null);
+            //when
+            //then
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEventWithStudentNameNull));
+            then(persistStudentCertificateRepository).shouldHaveNoInteractions();
+        }
+
+        @Test
+        void itShouldNotSaveStudentCertificateWithoutNullFieldsNotHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithoutNullFields =
+                    new StudentCertificateEvent(
+                            null,
+                            null,
+                            null,
+                            null);
+            //when
+            //then
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEventWithoutNullFields));
+            then(persistStudentCertificateRepository).shouldHaveNoInteractions();
+        }
+
+        @Test
+        void itShouldNotSaveStudentCertificateWithoutRandomNullFieldsNotHappyCase(){
+            //given
+            StudentCertificateEvent studentCertificateEventWithoutRandomNullFields =
+                    new StudentCertificateEvent(
+                            UUID.randomUUID(),
+                            null,
+                            UUID.randomUUID(),
+                            null);
+            //when
+            //then
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEventWithoutRandomNullFields));
+            then(persistStudentCertificateRepository).shouldHaveNoInteractions();
+        }
      }
 }

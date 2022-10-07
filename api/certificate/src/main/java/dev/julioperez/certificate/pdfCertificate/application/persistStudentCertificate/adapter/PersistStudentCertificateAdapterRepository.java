@@ -5,12 +5,12 @@ import dev.julioperez.certificate.pdfCertificate.domain.port.StudentCertificateM
 import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.dao.StudentCertificateDao;
 import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.model.StudentCertificateEntity;
 
-public class PersistStudentCertificateRepository {
+public class PersistStudentCertificateAdapterRepository {
 
     private final StudentCertificateDao studentCertificateDao;
     private final StudentCertificateMapper studentCertificateMapper;
 
-    public PersistStudentCertificateRepository(StudentCertificateDao studentCertificateDao, StudentCertificateMapper studentCertificateMapper) {
+    public PersistStudentCertificateAdapterRepository(StudentCertificateDao studentCertificateDao, StudentCertificateMapper studentCertificateMapper) {
         this.studentCertificateDao = studentCertificateDao;
         this.studentCertificateMapper = studentCertificateMapper;
     }
