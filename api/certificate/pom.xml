@@ -19,6 +19,7 @@
         <mockito.version>4.8.0</mockito.version>
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>

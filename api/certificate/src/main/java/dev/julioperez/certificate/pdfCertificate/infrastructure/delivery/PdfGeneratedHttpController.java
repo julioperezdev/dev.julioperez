@@ -1,11 +1,14 @@
 package dev.julioperez.certificate.pdfCertificate.infrastructure.delivery;
 
-import dev.julioperez.certificate.shared.application.logger.service.LoggerService;
+import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery.PersistStudentCertificateDelivery;
+import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/pdf")
@@ -13,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class PdfGeneratedHttpController {
 
-    //private final PersistStudentDelivery persistStudentDelivery;
+    private final PersistStudentCertificateDelivery persistStudentCertificateDelivery;
 
     @GetMapping("/retrieve")
     public void getPdfStudentCourse(){
         log.info("executing controller to get pdf by student course");
+        StudentCertificateEvent studentCertificateEvent = new StudentCertificateEvent(UUID.randomUUID(),"Java Course", UUID.randomUUID(), "Joe Miller");
+        persistStudentCertificateDelivery.persistStudentCertificate(studentCertificateEvent);
+        log.info("finalize controller to get pdf by student course");
     }
-
-    //@GetMapping("/generate")
-    public void generatePdf(){}
 }

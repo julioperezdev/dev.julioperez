@@ -9,6 +9,12 @@ import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.dao.S
 import dev.julioperez.certificate.shared.application.logger.adapter.LoggerAdapter;
 import dev.julioperez.certificate.shared.application.logger.service.LoggerService;
 import org.slf4j.Logger;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -85,6 +91,46 @@ public class SpringDependenciesConfiguration {
     @Bean
     public LoggerService loggerService(){
         return new LoggerService(loggerAdapter());
+    }
+
+
+    @Value("${julioperezdev.queue.name}")
+    public String QUEUE_NAME;
+
+    @Value("${julioperezdev.exchange.name}")
+    public String EXCHANGE_NAME;
+
+    @Value("${julioperezdev.routing.key}")
+    public String ROUTING_KEY;
+
+    @Bean
+    public Queue queue(){
+        return new Queue(QUEUE_NAME, true);
+    }
+
+    @Bean
+    public TopicExchange exchange(){
+        return new TopicExchange(EXCHANGE_NAME);
+    }
+
+    @Bean
+    public Binding binding(Queue queue, TopicExchange exchange){
+        return BindingBuilder
+                .bind(queue)
+                .to(exchange)
+                .with(ROUTING_KEY);
+    }
+
+    @Bean
+    public MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public AmqpTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(messageConverter());
+        return rabbitTemplate;
     }
 
 }
