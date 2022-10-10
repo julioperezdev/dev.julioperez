@@ -1,6 +1,10 @@
 package dev.julioperez.certificate.shared.infrastructure.configuration;
 
 
+import dev.julioperez.certificate.pdfCertificate.application.generatePdf.delivery.GeneratePdfDelivery;
+import dev.julioperez.certificate.pdfCertificate.application.generatePdf.service.GeneratePdfService;
+import dev.julioperez.certificate.pdfCertificate.application.getStudentCertificate.adapter.GetStudentCertificateAdapterRepository;
+import dev.julioperez.certificate.pdfCertificate.application.getStudentCertificate.service.GetStudentCertificateService;
 import dev.julioperez.certificate.pdfCertificate.application.modelMapper.StudentCertificateModelMapper;
 import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.adapter.PersistStudentCertificateAdapterRepository;
 import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery.PersistStudentCertificateDelivery;
@@ -44,7 +48,9 @@ public class SpringDependenciesConfiguration {
     }
 
     /**
+     * ===========================================================
      * =======================pdfCertificate======================
+     * ===========================================================
      */
 
     /**
@@ -77,9 +83,38 @@ public class SpringDependenciesConfiguration {
         return new PersistStudentCertificateDelivery(persistStudentCertificateService(),studentCertificateModelMapper());
     }
 
+    /**
+     * pdfCertificate/application/getStudentCertificate
+     */
+    @Bean
+    public GetStudentCertificateAdapterRepository getStudentCertificateAdapterRepository(){
+        return new GetStudentCertificateAdapterRepository(
+                studentCertificateDao,
+                studentCertificateModelMapper());
+    }
+
+    @Bean
+    public GetStudentCertificateService getStudentCertificateService(){
+        return new GetStudentCertificateService(getStudentCertificateAdapterRepository());
+    }
 
     /**
-     * =======================shared======================
+     * pdfCertificate/application/generatePdf
+     */
+    @Bean
+    public GeneratePdfService generatePdfService(){
+        return new GeneratePdfService(getStudentCertificateService());
+    }
+
+    @Bean
+    public GeneratePdfDelivery generatePdfDelivery(){
+        return new GeneratePdfDelivery(generatePdfService());
+    }
+
+    /**
+     * ===========================================================
+     * ==========================shared===========================
+     * ===========================================================
      */
 
     /**

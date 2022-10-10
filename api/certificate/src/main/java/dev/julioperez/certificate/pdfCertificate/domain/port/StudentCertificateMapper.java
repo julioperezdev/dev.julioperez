@@ -8,6 +8,7 @@ import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.model
 public interface StudentCertificateMapper {
 
     StudentCertificate toStudentCertificateDomain(StudentCertificateEvent studentCertificateEvent);
+    StudentCertificate toStudentCertificateDomain(StudentCertificateEntity studentCertificateEntity);
 
-    StudentCertificateEntity toStudentCertificateEntity(dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate studentCertificate);
+    StudentCertificateEntity toStudentCertificateEntity(StudentCertificate studentCertificate);
 }
