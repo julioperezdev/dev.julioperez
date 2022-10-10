@@ -74,7 +74,7 @@ public class SpringDependenciesConfiguration {
 
     @Bean
     public PersistStudentCertificateDelivery persistStudentCertificateDelivery(){
-        return new PersistStudentCertificateDelivery(persistStudentCertificateService());
+        return new PersistStudentCertificateDelivery(persistStudentCertificateService(),studentCertificateModelMapper());
     }
 
 

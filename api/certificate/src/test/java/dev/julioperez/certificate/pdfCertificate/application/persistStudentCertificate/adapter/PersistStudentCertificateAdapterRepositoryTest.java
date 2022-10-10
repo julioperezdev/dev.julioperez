@@ -1,6 +1,6 @@
 package dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.adapter;
 
-import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
+import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate;
 import dev.julioperez.certificate.pdfCertificate.domain.port.StudentCertificateMapper;
 import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.dao.StudentCertificateDao;
 import org.junit.jupiter.api.Nested;
@@ -29,14 +29,14 @@ class PersistStudentCertificateAdapterRepositoryTest {
         @Test
         void itShouldSaveStudentCertificateWithoutCertificateHashHappyCase(){
             //given
-            StudentCertificateEvent studentCertificateEventWithValidFields = mock(StudentCertificateEvent.class);
+            StudentCertificate studentCertificateMock = mock(StudentCertificate.class);
             //when
-            adapter.saveStudentCertificate(studentCertificateEventWithValidFields);
+            adapter.persistStudentCertificate(studentCertificateMock);
 
             //then
-            then(studentCertificateMapper).should().toStudentCertificateEntity(studentCertificateEventWithValidFields);
+            then(studentCertificateMapper).should().toStudentCertificateEntity(studentCertificateMock);
             then(studentCertificateMapper).shouldHaveNoMoreInteractions();
-            then(studentCertificateDao).should().save(studentCertificateMapper.toStudentCertificateEntity(studentCertificateEventWithValidFields));
+            then(studentCertificateDao).should().save(studentCertificateMapper.toStudentCertificateEntity(studentCertificateMock));
             then(studentCertificateDao).shouldHaveNoMoreInteractions();
         }
     }

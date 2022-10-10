@@ -2,7 +2,7 @@ package dev.julioperez.certificate.pdfCertificate.application.persistStudentCert
 
 import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.adapter.PersistStudentCertificateAdapterRepository;
 import dev.julioperez.certificate.pdfCertificate.domain.exception.StudentCertificateDontHaveValidField;
-import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
+import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,15 +27,15 @@ class PersistStudentCertificateServiceTest {
     @Nested
     public class saveStudentCertificateService{
 
-        StudentCertificateEvent studentCertificateEvent = mock(StudentCertificateEvent.class);
+        StudentCertificate studentCertificate = mock(StudentCertificate.class);
 
         @Test
         void itShouldSaveStudentCertificateWithoutCertificateHashHappyCase(){
             //given
             //when
-            service.saveStudentCertificate(studentCertificateEvent);
+            service.persistStudentCertificate(studentCertificate);
             //then
-            then(persistStudentCertificateRepository).should().saveStudentCertificate(studentCertificateEvent);
+            then(persistStudentCertificateRepository).should().persistStudentCertificate(studentCertificate);
             then(persistStudentCertificateRepository).shouldHaveNoMoreInteractions();
         }
 
@@ -43,9 +43,9 @@ class PersistStudentCertificateServiceTest {
         void itShouldNotSaveStudentCertificateWithSomeNullFieldNotHappyCase(){
             //given
             //when
-            when(studentCertificateEvent.isInvalidFields()).thenReturn(Boolean.TRUE);
+            when(studentCertificate.isInvalidFields()).thenReturn(Boolean.TRUE);
             //then
-            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.saveStudentCertificate(studentCertificateEvent));
+            assertThrows(StudentCertificateDontHaveValidField.class, () -> service.persistStudentCertificate(studentCertificate));
             then(persistStudentCertificateRepository).shouldHaveNoInteractions();
         }
 

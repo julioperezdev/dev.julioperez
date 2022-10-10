@@ -1,7 +1,7 @@
 package dev.julioperez.certificate.pdfCertificate.infrastructure.delivery;
 
 import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery.PersistStudentCertificateDelivery;
-import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
+import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery.StudentCertificateEvent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

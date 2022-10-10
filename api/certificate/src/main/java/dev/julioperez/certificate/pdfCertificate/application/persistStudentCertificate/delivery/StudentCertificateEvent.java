@@ -1,4 +1,4 @@
-package dev.julioperez.certificate.pdfCertificate.domain.model;
+package dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -1,17 +1,24 @@
 package dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery;
 
-import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
-import dev.julioperez.certificate.pdfCertificate.domain.port.PersistStudentCertificatePort;
+import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.service.PersistStudentCertificateInterface;
+import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.service.PersistStudentCertificateService;
+import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate;
+import dev.julioperez.certificate.pdfCertificate.domain.port.PersistStudentCertificateInputPort;
+import dev.julioperez.certificate.pdfCertificate.domain.port.StudentCertificateMapper;
 
-public class PersistStudentCertificateDelivery {
+public class PersistStudentCertificateDelivery implements PersistStudentCertificateInputPort {
 
-    private final PersistStudentCertificatePort persistStudentCertificatePort;
+    private final PersistStudentCertificateInterface persistStudentCertificateService;
+    private final StudentCertificateMapper studentCertificateMapper;
 
-    public PersistStudentCertificateDelivery(PersistStudentCertificatePort persistStudentCertificatePort) {
-        this.persistStudentCertificatePort = persistStudentCertificatePort;
+    public PersistStudentCertificateDelivery(PersistStudentCertificateInterface persistStudentCertificateService,StudentCertificateMapper studentCertificateMapper) {
+        this.persistStudentCertificateService = persistStudentCertificateService;
+        this.studentCertificateMapper = studentCertificateMapper;
     }
 
-    public void persistStudentCertificate(StudentCertificateEvent studentCertificateEvent){
-        persistStudentCertificatePort.saveStudentCertificate(studentCertificateEvent);
+    @Override
+    public void persistStudentCertificate(StudentCertificateEvent studentCertificateEvent) {
+        StudentCertificate studentCertificate = studentCertificateMapper.toStudentCertificateDomain(studentCertificateEvent);
+        persistStudentCertificateService.persistStudentCertificate(studentCertificate);
     }
 }

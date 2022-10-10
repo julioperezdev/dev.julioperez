@@ -1,4 +1,4 @@
-package dev.julioperez.certificate.pdfCertificate.domain.model;
+package dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

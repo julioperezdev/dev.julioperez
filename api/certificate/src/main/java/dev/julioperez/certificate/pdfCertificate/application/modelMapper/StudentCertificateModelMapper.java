@@ -1,6 +1,7 @@
 package dev.julioperez.certificate.pdfCertificate.application.modelMapper;
 
-import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
+import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.delivery.StudentCertificateEvent;
+import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate;
 import dev.julioperez.certificate.pdfCertificate.domain.port.StudentCertificateMapper;
 import dev.julioperez.certificate.pdfCertificate.infrastructure.repository.model.StudentCertificateEntity;
 
@@ -9,12 +10,23 @@ import java.util.UUID;
 public class StudentCertificateModelMapper implements StudentCertificateMapper {
 
     @Override
-    public StudentCertificateEntity toStudentCertificateEntity(StudentCertificateEvent studentCertificateEvent) {
-        return new StudentCertificateEntity(
+    public StudentCertificate toStudentCertificateDomain(StudentCertificateEvent studentCertificateEvent) {
+        return new dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate(
                 UUID.randomUUID(),
                 studentCertificateEvent.courseId(),
                 studentCertificateEvent.courseName(),
                 studentCertificateEvent.studentId(),
-                studentCertificateEvent.studentName());
+                studentCertificateEvent.studentName()
+        );
+    }
+
+    @Override
+    public StudentCertificateEntity toStudentCertificateEntity(dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate studentCertificate) {
+        return new StudentCertificateEntity(
+                studentCertificate.id(),
+                studentCertificate.courseId(),
+                studentCertificate.courseName(),
+                studentCertificate.studentId(),
+                studentCertificate.studentName());
     }
 }

@@ -1,25 +1,24 @@
 package dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.service;
 
-import dev.julioperez.certificate.pdfCertificate.application.persistStudentCertificate.adapter.PersistStudentCertificateAdapterRepository;
 import dev.julioperez.certificate.pdfCertificate.domain.exception.StudentCertificateDontHaveValidField;
-import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificateEvent;
-import dev.julioperez.certificate.pdfCertificate.domain.port.PersistStudentCertificatePort;
+import dev.julioperez.certificate.pdfCertificate.domain.model.StudentCertificate;
+import dev.julioperez.certificate.pdfCertificate.domain.port.PersistStudentCertificateOutputPort;
 
-public class PersistStudentCertificateService implements PersistStudentCertificatePort {
-    private final PersistStudentCertificateAdapterRepository persistStudentCertificateRepository;
+public class PersistStudentCertificateService implements PersistStudentCertificateInterface{
 
-    public PersistStudentCertificateService(PersistStudentCertificateAdapterRepository persistStudentCertificateRepository) {
-        this.persistStudentCertificateRepository = persistStudentCertificateRepository;
+    private final PersistStudentCertificateOutputPort persistStudentCertificateOutputPort;
+
+    public PersistStudentCertificateService(PersistStudentCertificateOutputPort persistStudentCertificateOutputPort) {
+        this.persistStudentCertificateOutputPort = persistStudentCertificateOutputPort;
     }
 
-    @Override
-    public void saveStudentCertificate(StudentCertificateEvent studentCertificateEvent) {
-        validateStudentCertificateEventFields(studentCertificateEvent);
-        persistStudentCertificateRepository.saveStudentCertificate(studentCertificateEvent);
+    public void persistStudentCertificate(StudentCertificate studentCertificate) {
+        validateStudentCertificateEventFields(studentCertificate);
+        persistStudentCertificateOutputPort.persistStudentCertificate(studentCertificate);
     }
 
-    private void validateStudentCertificateEventFields(StudentCertificateEvent studentCertificateEvent){
-        if(studentCertificateEvent.isInvalidFields()){
+    private void validateStudentCertificateEventFields(StudentCertificate studentCertificate){
+        if(studentCertificate.isInvalidFields()){
             throw new StudentCertificateDontHaveValidField("error in saveStudentCertificate because studentCertificateEvent has invalid fields");
         }
     }
